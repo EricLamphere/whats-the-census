@@ -6,15 +6,32 @@
 # -- >  Census Data: https://api.census.gov/data.html
 # -- >  Getting Started with Census API: https://cran.r-project.org/web/packages/censusapi/vignettes/getting-started.html
 
+if (Sys.getenv("CENSUS_API_KEY") == "") {
+  cli::cli_abort(c(
+    "Missing CENSUS_API_KEY environment variable",
+    ">" = "Sign up for a Census API key at https://api.census.gov/data/key_signup.html"
+  ))
+}
+
+# LIBRARIES ----
 # remotes::install_github("EricLamphere/ezverse")
 library(ezverse)
 library(tidyverse)
 library(shiny)
-library(censusapi)
+library(tidycensus)
 
-if (Sys.getenv("CENSUS_KEY") == "") {
-  cli::cli_alert_danger("Missing CENSUS_KEY in .Renviron")
-  stop("Must have a census API key in .Renviron: https://api.census.gov/data/key_signup.html")
-}
 
+# UTILS ----
+funs <- new.env()
+dirs <- list(
+  funs_dir = "src/funs/",
+  funs_files = list.files("./src/funs", recursive = T)
+)
+invisible(sapply(dirs$funs_dir %//% dirs$funs_files, source, local = funs))
+
+if (interactive())
+  invisible(sapply(dirs$funs_dir %//% dirs$funs_files, source, local = .GlobalEnv))
+
+
+# RUN APP ----
 shiny::runApp('census-app')

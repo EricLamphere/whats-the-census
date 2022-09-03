@@ -11,7 +11,7 @@
 shinyUI(fluidPage(
 
     # Application title
-    titlePanel("2019 US Census"),
+    titlePanel("2020 US Census"),
 
     # Sidebar with a slider input for number of bins
     sidebarLayout(
