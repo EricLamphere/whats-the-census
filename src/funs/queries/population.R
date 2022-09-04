@@ -26,4 +26,22 @@ acs5 <- function(state, variables, year = 2020) {
       cache_table = TRUE
     )
 
+  process <- purrr::partial(
+    agg_append,
+    .all_dims = c("state", "gender"),
+    pop = sum(pop, na.rm = TRUE),
+    moe = tidycensus::moe_sum(moe, pop, na.rm = TRUE)
+  )
+
+  errythang <-
+    gender %>%
+    dplyr::select(state = NAME, gender = variable, pop = estimate, moe) %>%
+    process(.dims = "state") %>%
+    process(.dims = "gender") %>%
+    process()
 }
+
+
+
+
+
