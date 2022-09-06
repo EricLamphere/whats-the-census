@@ -19,6 +19,7 @@ library(ezverse)
 library(tidyverse)
 library(shiny)
 library(tidycensus)
+library(plotly)
 
 
 # UTILS ----
@@ -34,4 +35,9 @@ if (interactive())
 
 
 # RUN APP ----
-shiny::runApp('census-app')
+## queries ----
+# > running these once
+source("src/data.R")
+
+## run app ----
+shiny::runApp()

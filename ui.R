@@ -16,16 +16,13 @@ shinyUI(fluidPage(
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+            # selectInput("state", "State", unique(sex_by_state$state))
+            selectInput("sex", "Sex", c("both", unique(sex_by_state$sex)))
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("distPlot")
+            plotlyOutput("sex_state_plot")
         )
     )
 ))

@@ -8,11 +8,11 @@
 
 
 # Query ----
-acs5_gender <- function(year = 2020) {
+acs5_sex <- function(year = 2020) {
   vars <- acs5_vars(year = year)
 
   # moe = 90% confidence interval (i.e. estimate +- moe)
-  gender <-
+  sex <-
     tidycensus::get_acs(
       "state",
       variables = c(
@@ -28,17 +28,18 @@ acs5_gender <- function(year = 2020) {
 
   agger <- purrr::partial(
     ezxfig::agg,
-    .all_dims = c("state", "gender"),
+    .all_dims = c("state", "sex"),
     pop = sum(pop, na.rm = TRUE),
     moe = tidycensus::moe_sum(moe, pop, na.rm = TRUE)
   )
 
   # get rollups for all dimension values
-  gender %>%
-    dplyr::select(state = NAME, gender = variable, pop = estimate, moe) %>%
+  sex %>%
+    dplyr::select(state = NAME, sex = variable, pop = estimate, moe) %>%
     agger(.dims = "state") %>%
-    agger(.dims = "gender") %>%
-    agger()
+    agger(.dims = "sex") %>%
+    agger() %>%
+    ezxfig::nuke("TOTAL", "overall", which_cols = c("state", "sex"))
 }
 
 
