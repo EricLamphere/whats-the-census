@@ -8,7 +8,7 @@
 
 
 # Query ----
-acs5 <- function(state, variables, year = 2020) {
+acs5_gender <- function(year = 2020) {
   vars <- acs5_vars(year = year)
 
   # moe = 90% confidence interval (i.e. estimate +- moe)
@@ -26,19 +26,19 @@ acs5 <- function(state, variables, year = 2020) {
       cache_table = TRUE
     )
 
-  process <- purrr::partial(
-    agg_append,
+  agger <- purrr::partial(
+    ezxfig::agg,
     .all_dims = c("state", "gender"),
     pop = sum(pop, na.rm = TRUE),
     moe = tidycensus::moe_sum(moe, pop, na.rm = TRUE)
   )
 
-  errythang <-
-    gender %>%
+  # get rollups for all dimension values
+  gender %>%
     dplyr::select(state = NAME, gender = variable, pop = estimate, moe) %>%
-    process(.dims = "state") %>%
-    process(.dims = "gender") %>%
-    process()
+    agger(.dims = "state") %>%
+    agger(.dims = "gender") %>%
+    agger()
 }
 
 
