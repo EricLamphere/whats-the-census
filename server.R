@@ -23,9 +23,16 @@ shinyServer(function(input, output) {
       x = ~state,
       y = ~pop,
       color = ~sex,
+      colors = c("#27F879", "#20A1F9"),
       type = "scatter",
       mode = "markers"
-    )
+    ) %>%
+      plotly::layout(
+        title = "Population by State and Sex",
+        legend = list(title=list(text='<b> Sex </b>')),
+        xaxis = list(title = "Population"),
+        yaxis = list(title = "State")
+      )
   })
 
 })
